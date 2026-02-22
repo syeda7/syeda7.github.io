@@ -1,0 +1,1719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Syeda Uzra Fatima — Software Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════ */
+:root {
+  --cream:    #F5F0E8;
+  --paper:    #FDFAF4;
+  --ink:      #0E0B07;
+  --ink-soft: #3A3228;
+  --ink-mute: #8A7F72;
+  --rose:     #C8405A;
+  --rose-lt:  #F2C4CC;
+  --gold:     #B8860B;
+  --gold-lt:  #F0E0A0;
+  --teal:     #1A7A6E;
+  --teal-lt:  #B0DDD8;
+  --border:   rgba(14,11,7,0.12);
+  --border-strong: rgba(14,11,7,0.25);
+}
+
+/* ═══════════════════════════════════════════
+   RESET + BASE
+═══════════════════════════════════════════ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ─── Custom Cursor ─── */
+.cursor {
+  position: fixed; top:0; left:0; z-index:9999;
+  width:12px; height:12px;
+  background: var(--rose);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%,-50%);
+  transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+  mix-blend-mode: multiply;
+}
+.cursor-ring {
+  position: fixed; top:0; left:0; z-index:9998;
+  width:40px; height:40px;
+  border: 1.5px solid var(--rose);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%,-50%);
+  transition: transform 0.15s ease-out, width 0.3s, height 0.3s;
+}
+.cursor.hover { width:6px; height:6px; }
+.cursor-ring.hover { width:60px; height:60px; border-color: var(--gold); }
+
+/* ─── Noise Texture Overlay ─── */
+body::before {
+  content:'';
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+  opacity:0.5;
+}
+
+/* ═══════════════════════════════════════════
+   SCROLL PROGRESS
+═══════════════════════════════════════════ */
+#progress {
+  position:fixed; top:0; left:0; z-index:200;
+  height:3px; width:0%;
+  background: linear-gradient(90deg, var(--rose), var(--gold));
+  transition: width 0.1s linear;
+}
+
+/* ═══════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════ */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 0 4rem;
+  height: 72px;
+  background: rgba(253,250,244,0.88);
+  backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-wordmark {
+  font-family: 'Cormorant Garamond', serif;
+  font-size:1.5rem; font-weight:600; font-style:italic;
+  color: var(--ink);
+  letter-spacing:0.02em;
+  position:relative;
+}
+.nav-wordmark::after {
+  content:'';
+  position:absolute; bottom:-2px; left:0; right:0; height:2px;
+  background: var(--rose);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.4s cubic-bezier(.76,0,.24,1);
+}
+.nav-wordmark:hover::after { transform: scaleX(1); }
+
+.nav-links {
+  display:flex; gap:2.5rem; list-style:none; align-items:center;
+}
+.nav-links a {
+  font-family: 'Space Mono', monospace;
+  font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase;
+  color: var(--ink-mute); text-decoration:none;
+  transition: color 0.3s;
+  position:relative;
+}
+.nav-links a.active, .nav-links a:hover { color: var(--ink); }
+.nav-links a::before {
+  content: attr(data-num);
+  font-size:0.5rem; vertical-align:super; margin-right:2px;
+  color: var(--rose);
+}
+
+.nav-hire {
+  font-family: 'Space Mono', monospace;
+  font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase;
+  color: var(--paper); background: var(--ink);
+  padding:0.55rem 1.4rem; text-decoration:none;
+  border-radius: 0;
+  transition: background 0.3s, color 0.3s;
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 92% 100%, 0 100%);
+  padding-right:2rem;
+}
+.nav-hire:hover { background: var(--rose); }
+
+/* ═══════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════ */
+#hero {
+  min-height: 100vh;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  position:relative;
+  overflow:hidden;
+  padding-top:72px;
+}
+
+/* Animated geometric background */
+.hero-bg {
+  position:absolute; inset:0; z-index:0;
+  overflow:hidden;
+}
+.hero-bg .geo-line {
+  position:absolute;
+  background: var(--border);
+}
+.geo-line:nth-child(1) { width:1px; height:100%; left:50%; top:0; animation: lineGrow 1.5s ease 0.2s both; }
+.geo-line:nth-child(2) { width:1px; height:100%; left:25%; top:0; animation: lineGrow 1.5s ease 0.4s both; }
+.geo-line:nth-child(3) { width:1px; height:100%; left:75%; top:0; animation: lineGrow 1.5s ease 0.6s both; }
+.geo-line:nth-child(4) { height:1px; width:100%; top:33%; left:0; animation: lineGrowH 1.5s ease 0.8s both; }
+.geo-line:nth-child(5) { height:1px; width:100%; top:66%; left:0; animation: lineGrowH 1.5s ease 1.0s both; }
+
+@keyframes lineGrow {
+  from { transform: scaleY(0); transform-origin: top; }
+  to { transform: scaleY(1); }
+}
+@keyframes lineGrowH {
+  from { transform: scaleX(0); transform-origin: left; }
+  to { transform: scaleX(1); }
+}
+
+.hero-geo-circle {
+  position:absolute; right:-80px; top:50%; transform:translateY(-50%);
+  width:500px; height:500px;
+  border:1px solid var(--border-strong);
+  border-radius:50%;
+  animation: spinSlow 40s linear infinite;
+}
+.hero-geo-circle::after {
+  content:'';
+  position:absolute; inset:40px;
+  border:1px solid var(--border);
+  border-radius:50%;
+  animation: spinSlow 25s linear infinite reverse;
+}
+@keyframes spinSlow { to { transform: translateY(-50%) rotate(360deg); } }
+
+/* Floating data bits */
+.data-bit {
+  position:absolute;
+  font-family:'Space Mono', monospace;
+  font-size:0.6rem; color: rgba(14,11,7,0.08);
+  animation: floatBit 8s ease-in-out infinite;
+  user-select:none; pointer-events:none;
+}
+@keyframes floatBit {
+  0%,100% { transform: translateY(0) rotate(0deg); opacity:0.08; }
+  50% { transform: translateY(-20px) rotate(2deg); opacity:0.12; }
+}
+
+/* Hero Left */
+.hero-left {
+  z-index:2; position:relative;
+  display:flex; flex-direction:column; justify-content:center;
+  padding: 6rem 4rem 6rem 6rem;
+}
+
+.hero-eyebrow {
+  font-family:'Space Mono', monospace;
+  font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase;
+  color: var(--rose);
+  margin-bottom:1.5rem;
+  display:flex; align-items:center; gap:1rem;
+  opacity:0; animation: slideRight 0.8s ease 0.5s both;
+}
+.hero-eyebrow::before {
+  content:''; display:block;
+  width:40px; height:1px; background:var(--rose);
+}
+
+.hero-name {
+  font-family:'Cormorant Garamond', serif;
+  font-size: clamp(3.5rem,6vw,6.5rem);
+  font-weight:300; line-height:0.92;
+  letter-spacing:-0.02em;
+  margin-bottom:0.3rem;
+  opacity:0; animation: slideRight 0.8s ease 0.7s both;
+}
+.hero-name em {
+  font-style:italic; font-weight:600;
+  color: var(--rose);
+  display:block;
+}
+
+.hero-title-bar {
+  display:flex; align-items:center; gap:1rem; margin:2rem 0 1.5rem;
+  opacity:0; animation: slideRight 0.8s ease 0.9s both;
+}
+.hero-title-bar span {
+  font-family:'Space Mono', monospace;
+  font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase;
+  background:var(--ink); color:var(--paper);
+  padding:0.35rem 0.8rem;
+}
+.hero-title-bar span:nth-child(2) { background:var(--rose); }
+.hero-title-bar span:nth-child(3) { background:var(--teal); }
+
+.hero-bio {
+  font-size:1rem; line-height:1.75; color:var(--ink-soft);
+  max-width:440px; margin-bottom:3rem;
+  opacity:0; animation: slideRight 0.8s ease 1.1s both;
+}
+
+.hero-stats {
+  display:grid; grid-template-columns: repeat(3,1fr);
+  border:1px solid var(--border-strong);
+  margin-bottom:2.5rem;
+  opacity:0; animation: slideRight 0.8s ease 1.3s both;
+}
+.hero-stat {
+  padding:1.2rem; border-right:1px solid var(--border-strong);
+  position:relative; overflow:hidden;
+  transition: background 0.3s;
+}
+.hero-stat:last-child { border-right:none; }
+.hero-stat:hover { background: var(--cream); }
+.hero-stat-num {
+  font-family:'Cormorant Garamond', serif;
+  font-size:2.8rem; font-weight:700; line-height:1;
+  color:var(--rose);
+}
+.hero-stat-label {
+  font-family:'Space Mono', monospace;
+  font-size:0.55rem; letter-spacing:0.14em; text-transform:uppercase;
+  color: var(--ink-mute);
+  margin-top:0.3rem;
+}
+
+.hero-actions {
+  display:flex; gap:1rem;
+  opacity:0; animation: slideRight 0.8s ease 1.5s both;
+}
+.btn-primary {
+  font-family:'Space Mono', monospace;
+  font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--paper); background:var(--ink);
+  padding:0.9rem 2rem; text-decoration:none;
+  border:2px solid var(--ink);
+  transition:all 0.35s cubic-bezier(.76,0,.24,1);
+  position:relative; overflow:hidden;
+}
+.btn-primary::after {
+  content:''; position:absolute;
+  inset:0; background:var(--rose);
+  transform: translateX(-101%);
+  transition: transform 0.35s cubic-bezier(.76,0,.24,1);
+  z-index:-1;
+}
+.btn-primary:hover { border-color:var(--rose); }
+.btn-primary:hover::after { transform:translateX(0); }
+.btn-outline {
+  font-family:'Space Mono', monospace;
+  font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--ink); background:transparent;
+  padding:0.9rem 2rem; text-decoration:none;
+  border:2px solid var(--border-strong);
+  transition:all 0.3s;
+}
+.btn-outline:hover { border-color:var(--ink); background:var(--cream); }
+
+/* Hero Right */
+.hero-right {
+  z-index:2; position:relative;
+  display:flex; align-items:center; justify-content:center;
+  padding:6rem 4rem;
+  border-left:1px solid var(--border);
+}
+
+.hero-card-stack {
+  position:relative; width:320px; height:400px;
+}
+.hero-profile-card {
+  position:absolute;
+  width:300px; height:380px;
+  background:var(--ink);
+  padding:2rem;
+  color:var(--paper);
+  animation: cardFloat 6s ease-in-out infinite;
+}
+.hero-profile-card:nth-child(1) {
+  top:20px; left:20px;
+  background: var(--cream);
+  border:1px solid var(--border-strong);
+  color:var(--ink);
+  transform: rotate(4deg);
+  animation-delay:-3s;
+}
+.hero-profile-card:nth-child(2) {
+  top:0; left:0;
+  background: var(--ink);
+}
+.profile-card-tag {
+  font-family:'Space Mono', monospace;
+  font-size:0.58rem; letter-spacing:0.15em; text-transform:uppercase;
+  color:var(--rose); margin-bottom:1.5rem;
+}
+.profile-card-initial {
+  font-family:'Cormorant Garamond', serif;
+  font-size:6rem; font-weight:700; line-height:1;
+  color: rgba(255,255,255,0.06);
+  position:absolute; top:0.5rem; right:1.5rem;
+}
+.profile-location {
+  font-family:'Space Mono', monospace;
+  font-size:0.62rem; color:rgba(255,255,255,0.5);
+  margin-bottom:0.5rem; display:flex; align-items:center; gap:0.4rem;
+}
+.profile-location::before { content:'◉'; color:var(--rose); font-size:0.5rem; }
+.profile-card-name {
+  font-family:'Cormorant Garamond', serif;
+  font-size:1.6rem; font-weight:600; line-height:1.2;
+  margin-bottom:0.3rem;
+}
+.profile-card-role {
+  font-size:0.82rem; color:rgba(255,255,255,0.6);
+  margin-bottom:1.5rem;
+  font-style:italic;
+}
+.profile-skills-mini {
+  display:flex; flex-wrap:wrap; gap:0.4rem;
+  margin-top:auto;
+}
+.skill-chip {
+  font-family:'Space Mono', monospace;
+  font-size:0.55rem; letter-spacing:0.08em;
+  padding:0.25rem 0.6rem;
+  border:1px solid rgba(255,255,255,0.15);
+  color:rgba(255,255,255,0.7);
+  border-radius:2px;
+}
+.profile-available {
+  display:flex; align-items:center; gap:0.5rem;
+  margin-top:1.5rem;
+  font-family:'Space Mono', monospace;
+  font-size:0.6rem; color:rgba(255,255,255,0.5);
+}
+.avail-dot {
+  width:7px; height:7px; border-radius:50%;
+  background:#4ade80;
+  box-shadow: 0 0 8px #4ade80;
+  animation: pulseGreen 2s ease infinite;
+}
+@keyframes pulseGreen {
+  0%,100% { box-shadow: 0 0 4px #4ade80; }
+  50% { box-shadow: 0 0 12px #4ade80; }
+}
+
+@keyframes cardFloat {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(0.5deg); }
+}
+@keyframes slideRight {
+  from { opacity:0; transform:translateX(-30px); }
+  to { opacity:1; transform:translateX(0); }
+}
+
+/* ═══════════════════════════════════════════
+   SECTION WRAPPER
+═══════════════════════════════════════════ */
+.section-wrap {
+  position:relative; z-index:1;
+  padding: 7rem 6rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.section-wrap.full { max-width:100%; padding:7rem 6rem; }
+.section-header { margin-bottom:4rem; }
+.section-num {
+  font-family:'Space Mono', monospace;
+  font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--rose); margin-bottom:0.5rem;
+  display:flex; align-items:center; gap:0.8rem;
+}
+.section-num::after {
+  content:''; flex:1; max-width:60px;
+  height:1px; background:var(--rose);
+}
+.section-title {
+  font-family:'Cormorant Garamond', serif;
+  font-size: clamp(2.5rem, 4vw, 4rem);
+  font-weight:300; line-height:1.05;
+  letter-spacing:-0.02em;
+}
+.section-title em { font-style:italic; font-weight:600; }
+
+/* Divider */
+.divider {
+  width:100%; height:1px;
+  background: linear-gradient(90deg, var(--rose), transparent 60%);
+  margin:0;
+}
+
+/* ═══════════════════════════════════════════
+   SKILLS — FLASHCARDS
+═══════════════════════════════════════════ */
+#skills { background:var(--cream); }
+
+.flashcards-grid {
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:1.5rem;
+}
+
+.fc {
+  height:220px;
+  perspective:1000px;
+  cursor:pointer;
+}
+.fc-inner {
+  position:relative; width:100%; height:100%;
+  transform-style:preserve-3d;
+  transition:transform 0.7s cubic-bezier(.68,-.55,.265,1.55);
+}
+.fc:hover .fc-inner { transform:rotateY(180deg); }
+
+.fc-face {
+  position:absolute; inset:0;
+  backface-visibility:hidden;
+  border:1px solid var(--border-strong);
+  padding:1.8rem;
+  display:flex; flex-direction:column;
+}
+.fc-front { background:var(--paper); }
+.fc-back { transform:rotateY(180deg); }
+
+.fc-front-icon {
+  font-size:2.2rem; margin-bottom:auto;
+}
+.fc-front-title {
+  font-family:'Cormorant Garamond', serif;
+  font-size:1.4rem; font-weight:600;
+  margin-bottom:0.3rem;
+}
+.fc-front-cat {
+  font-family:'Space Mono', monospace;
+  font-size:0.58rem; letter-spacing:0.14em; text-transform:uppercase;
+}
+
+/* Individual card themes */
+.fc:nth-child(1) .fc-back { background:var(--ink); color:var(--paper); }
+.fc:nth-child(2) .fc-back { background:var(--rose); color:var(--paper); }
+.fc:nth-child(3) .fc-back { background:var(--teal); color:var(--paper); }
+.fc:nth-child(4) .fc-back { background:var(--gold); color:var(--paper); }
+.fc:nth-child(5) .fc-back { background:#1a1a2e; color:var(--paper); }
+.fc:nth-child(6) .fc-back { background:#2d1b69; color:var(--paper); }
+
+.fc-back-label {
+  font-family:'Space Mono', monospace;
+  font-size:0.58rem; letter-spacing:0.15em; text-transform:uppercase;
+  opacity:0.6; margin-bottom:0.8rem;
+}
+.fc-back-title {
+  font-family:'Cormorant Garamond', serif;
+  font-size:1.15rem; font-weight:600;
+  margin-bottom:0.8rem;
+}
+.fc-back-items {
+  font-size:0.82rem; line-height:1.8;
+  opacity:0.9;
+}
+.fc-back-items span {
+  display:inline-block;
+  margin:0.1rem 0.25rem;
+  padding:0.1rem 0.4rem;
+  background:rgba(255,255,255,0.12);
+  border-radius:2px;
+}
+
+.fc-hint {
+  font-family:'Space Mono', monospace;
+  font-size:0.55rem; letter-spacing:0.1em;
+  color:var(--ink-mute); margin-top:auto; text-align:right;
+}
+
+.fc:nth-child(1) .fc-front-cat { color:var(--ink); }
+.fc:nth-child(2) .fc-front-cat { color:var(--rose); }
+.fc:nth-child(3) .fc-front-cat { color:var(--teal); }
+.fc:nth-child(4) .fc-front-cat { color:var(--gold); }
+.fc:nth-child(5) .fc-front-cat { color:#6366f1; }
+.fc:nth-child(6) .fc-front-cat { color:#7c3aed; }
+
+/* ═══════════════════════════════════════════
+   EXPERIENCE — TIMELINE
+═══════════════════════════════════════════ */
+#experience { background:var(--paper); }
+
+.timeline {
+  display:grid; gap:0;
+  border:1px solid var(--border-strong);
+}
+.tl-item {
+  display:grid; grid-template-columns:200px 1fr;
+  border-bottom:1px solid var(--border);
+  position:relative;
+  transition:background 0.3s;
+}
+.tl-item:last-child { border-bottom:none; }
+.tl-item:hover { background:var(--cream); }
+.tl-item::before {
+  content:attr(data-num);
+  position:absolute;
+  font-family:'Cormorant Garamond', serif;
+  font-size:6rem; font-weight:700;
+  color:rgba(14,11,7,0.04);
+  top:-1rem; right:2rem;
+  line-height:1; pointer-events:none;
+}
+.tl-left {
+  padding:2.5rem 2rem;
+  border-right:1px solid var(--border);
+  display:flex; flex-direction:column; justify-content:flex-start;
+}
+.tl-date {
+  font-family:'Space Mono', monospace;
+  font-size:0.62rem; letter-spacing:0.14em; text-transform:uppercase;
+  color:var(--rose); margin-bottom:0.5rem;
+}
+.tl-type {
+  font-family:'Space Mono', monospace;
+  font-size:0.58rem; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--ink-mute); padding:0.2rem 0.5rem;
+  border:1px solid var(--border-strong); width:fit-content;
+}
+.tl-right {
+  padding:2.5rem 3rem;
+}
+.tl-role {
+  font-family:'Cormorant Garamond', serif;
+  font-size:1.6rem; font-weight:600; line-height:1.1;
+  margin-bottom:0.4rem;
+}
+.tl-company {
+  font-family:'Space Mono', monospace;
+  font-size:0.68rem; letter-spacing:0.08em;
+  color:var(--ink-mute); margin-bottom:1rem;
+}
+.tl-desc {
+  font-size:0.92rem; line-height:1.75; color:var(--ink-soft);
+  max-width:620px;
+}
+.tl-bullets {
+  list-style:none; margin-top:1rem; display:flex; flex-direction:column; gap:0.4rem;
+}
+.tl-bullets li {
+  font-size:0.88rem; line-height:1.6; color:var(--ink-soft);
+  display:flex; gap:0.7rem; align-items:baseline;
+}
+.tl-bullets li::before { content:'→'; color:var(--rose); font-size:0.7rem; flex-shrink:0; }
+
+/* ═══════════════════════════════════════════
+   PROJECTS — CARD GRID
+═══════════════════════════════════════════ */
+#projects { background:var(--cream); }
+
+.projects-grid {
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:0;
+  border:1px solid var(--border-strong);
+}
+.proj-card {
+  padding:2.2rem;
+  border-right:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  position:relative; overflow:hidden;
+  transition:background 0.3s;
+  text-decoration:none; color:inherit; display:block;
+}
+.proj-card:nth-child(3n) { border-right:none; }
+.proj-card:nth-child(4), .proj-card:nth-child(5), .proj-card:nth-child(6) { border-bottom:none; }
+.proj-card:hover { background:var(--paper); }
+.proj-card::after {
+  content:'';
+  position:absolute; bottom:0; left:0; right:0; height:3px;
+  transform:scaleX(0); transform-origin:left;
+  transition:transform 0.4s cubic-bezier(.76,0,.24,1);
+}
+.proj-card:hover::after { transform:scaleX(1); }
+.proj-card:nth-child(1)::after { background:var(--rose); }
+.proj-card:nth-child(2)::after { background:var(--teal); }
+.proj-card:nth-child(3)::after { background:var(--gold); }
+.proj-card:nth-child(4)::after { background:#6366f1; }
+.proj-card:nth-child(5)::after { background:var(--rose); }
+.proj-card:nth-child(6)::after { background:var(--teal); }
+
+.proj-num {
+  font-family:'Cormorant Garamond', serif;
+  font-size:3.5rem; font-weight:700;
+  color:rgba(14,11,7,0.07); line-height:1;
+  margin-bottom:0.5rem;
+}
+.proj-cat {
+  font-family:'Space Mono', monospace;
+  font-size:0.58rem; letter-spacing:0.16em; text-transform:uppercase;
+  color:var(--rose); margin-bottom:0.7rem;
+}
+.proj-title {
+  font-family:'Cormorant Garamond', serif;
+  font-size:1.25rem; font-weight:600; line-height:1.3;
+  margin-bottom:0.7rem;
+}
+.proj-desc {
+  font-size:0.83rem; line-height:1.65;
+  color:var(--ink-soft); margin-bottom:1.2rem;
+}
+.proj-tags { display:flex; flex-wrap:wrap; gap:0.35rem; margin-bottom:1rem; }
+.proj-tag {
+  font-family:'Space Mono', monospace;
+  font-size:0.55rem; letter-spacing:0.08em;
+  padding:0.2rem 0.5rem;
+  border:1px solid var(--border-strong);
+  color:var(--ink-mute);
+}
+.proj-cert {
+  font-family:'Space Mono', monospace;
+  font-size:0.58rem; letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--teal);
+  display:flex; align-items:center; gap:0.4rem;
+}
+.proj-cert::before { content:'✓'; font-weight:bold; }
+.proj-arrow {
+  position:absolute; top:1.5rem; right:1.5rem;
+  font-size:1.1rem; color:var(--border-strong);
+  transition:all 0.3s;
+}
+.proj-card:hover .proj-arrow { color:var(--rose); transform:translate(3px,-3px); }
+
+/* ═══════════════════════════════════════════
+   CERTIFICATIONS
+═══════════════════════════════════════════ */
+#certifications { background:var(--ink); color:var(--paper); }
+#certifications .section-title { color:var(--paper); }
+#certifications .section-num { color:var(--gold-lt); }
+#certifications .section-num::after { background:var(--gold-lt); }
+
+.certs-marquee-wrap { overflow:hidden; border-top:1px solid rgba(255,255,255,0.08); border-bottom:1px solid rgba(255,255,255,0.08); margin-bottom:4rem; }
+.certs-marquee {
+  display:flex; gap:0;
+  animation: marquee 25s linear infinite;
+  width:max-content;
+}
+.certs-marquee:hover { animation-play-state:paused; }
+.cert-item {
+  display:flex; align-items:center; gap:1.5rem;
+  padding:1.8rem 3rem;
+  border-right:1px solid rgba(255,255,255,0.08);
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.cert-icon { font-size:1.4rem; }
+.cert-name {
+  font-family:'Cormorant Garamond', serif;
+  font-size:1.05rem; font-weight:600;
+}
+.cert-issuer {
+  font-family:'Space Mono', monospace;
+  font-size:0.58rem; letter-spacing:0.1em;
+  color:rgba(255,255,255,0.4); text-transform:uppercase;
+}
+@keyframes marquee {
+  from { transform:translateX(0); }
+  to { transform:translateX(-50%); }
+}
+
+.certs-grid {
+  display:grid; grid-template-columns:repeat(4,1fr);
+  gap:1px; background:rgba(255,255,255,0.08);
+}
+.cert-block {
+  background:var(--ink); padding:2rem 1.5rem;
+  transition:background 0.3s;
+}
+.cert-block:hover { background:#1a1610; }
+.cert-block-num {
+  font-family:'Cormorant Garamond', serif;
+  font-size:3rem; font-weight:700; color:var(--rose); line-height:1; margin-bottom:0.5rem;
+}
+.cert-block-name {
+  font-family:'Cormorant Garamond', serif;
+  font-size:1rem; font-weight:600; margin-bottom:0.3rem;
+}
+.cert-block-cat {
+  font-family:'Space Mono', monospace;
+  font-size:0.55rem; letter-spacing:0.12em; text-transform:uppercase;
+  color:rgba(255,255,255,0.4);
+}
+
+/* ═══════════════════════════════════════════
+   WOMEN IN TECH EVENTS
+═══════════════════════════════════════════ */
+#women-in-tech { background:var(--paper); }
+
+.wit-banner {
+  background: linear-gradient(135deg, var(--rose) 0%, #8B1A2E 100%);
+  padding:3rem 6rem;
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:4rem;
+  position:relative; overflow:hidden;
+}
+.wit-banner::after {
+  content:'♀';
+  position:absolute; right:3rem; top:50%; transform:translateY(-50%);
+  font-size:8rem; color:rgba(255,255,255,0.08);
+  line-height:1; pointer-events:none;
+}
+.wit-banner-title {
+  font-family:'Cormorant Garamond', serif;
+  font-size:2rem; font-weight:600; font-style:italic;
+  color:var(--paper);
+}
+.wit-banner-sub {
+  font-family:'Space Mono', monospace;
+  font-size:0.62rem; letter-spacing:0.14em; text-transform:uppercase;
+  color:rgba(255,255,255,0.65); margin-top:0.4rem;
+}
+.wit-badge {
+  font-family:'Space Mono', monospace;
+  font-size:0.65rem; letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--rose); background:var(--paper);
+  padding:0.5rem 1.2rem;
+}
+
+.events-grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;
+}
+.event-card {
+  border:1px solid var(--border-strong);
+  padding:0;
+  overflow:hidden;
+  transition:transform 0.3s, box-shadow 0.3s;
+}
+.event-card:hover {
+  transform:translateY(-5px);
+  box-shadow:0 20px 60px rgba(0,0,0,0.1);
+}
+.event-card-top {
+  padding:1.8rem;
+  border-bottom:1px solid var(--border);
+}
+.event-date-row {
+  display:flex; align-items:baseline; gap:0.5rem; margin-bottom:1rem;
+}
+.event-day {
+  font-family:'Cormorant Garamond', serif;
+  font-size:3rem; font-weight:700; line-height:1; color:var(--rose);
+}
+.event-month-year {
+  font-family:'Space Mono', monospace;
+  font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--ink-mute);
+}
+.event-title {
+  font-family:'Cormorant Garamond', serif;
+  font-size:1.15rem; font-weight:600; line-height:1.3;
+  margin-bottom:0.4rem;
+}
+.event-org {
+  font-family:'Space Mono', monospace;
+  font-size:0.58rem; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--rose);
+}
+.event-card-body { padding:1.5rem 1.8rem; }
+.event-desc {
+  font-size:0.83rem; line-height:1.65; color:var(--ink-soft);
+  margin-bottom:1rem;
+}
+.event-tags { display:flex; flex-wrap:wrap; gap:0.35rem; margin-bottom:1.2rem; }
+.event-tag {
+  font-family:'Space Mono', monospace;
+  font-size:0.55rem; letter-spacing:0.08em;
+  padding:0.2rem 0.55rem;
+  background:var(--cream); border:1px solid var(--border);
+  color:var(--ink-mute);
+}
+.event-link {
+  font-family:'Space Mono', monospace;
+  font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--rose); text-decoration:none;
+  display:inline-flex; align-items:center; gap:0.5rem;
+  border-bottom:1px solid var(--rose-lt);
+  padding-bottom:2px;
+  transition:gap 0.2s, border-color 0.2s;
+}
+.event-link:hover { gap:0.8rem; border-color:var(--rose); }
+.event-role-badge {
+  display:inline-block;
+  font-family:'Space Mono', monospace;
+  font-size:0.5rem; letter-spacing:0.12em; text-transform:uppercase;
+  padding:0.15rem 0.5rem;
+  margin-left:0.5rem;
+  vertical-align:middle;
+}
+.badge-speaker { background:var(--rose); color:white; }
+.badge-mentor  { background:var(--teal); color:white; }
+.badge-judge   { background:var(--gold); color:white; }
+
+/* ═══════════════════════════════════════════
+   CONTACT
+═══════════════════════════════════════════ */
+#contact {
+  background:var(--cream);
+  position:relative; overflow:hidden;
+}
+.contact-inner {
+  max-width:900px; margin:0 auto; text-align:center;
+}
+.contact-super {
+  font-family:'Cormorant Garamond', serif;
+  font-size: clamp(3.5rem,8vw,8rem);
+  font-weight:300; line-height:0.9;
+  letter-spacing:-0.03em; margin-bottom:2rem;
+}
+.contact-super em { font-style:italic; font-weight:700; color:var(--rose); display:block; }
+.contact-sub {
+  font-size:1rem; line-height:1.7; color:var(--ink-soft);
+  max-width:500px; margin:0 auto 3rem;
+}
+.contact-links {
+  display:flex; justify-content:center; flex-wrap:wrap; gap:1rem;
+  margin-bottom:4rem;
+}
+.contact-link {
+  font-family:'Space Mono', monospace;
+  font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--ink); text-decoration:none;
+  padding:0.85rem 2rem;
+  border:1px solid var(--border-strong);
+  transition:all 0.3s;
+  display:flex; align-items:center; gap:0.5rem;
+}
+.contact-link:hover { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.contact-link.primary { background:var(--rose); color:var(--paper); border-color:var(--rose); }
+.contact-link.primary:hover { background:var(--ink); border-color:var(--ink); }
+
+.contact-geo {
+  position:absolute; bottom:-80px; right:-80px;
+  width:400px; height:400px;
+  border:1px solid var(--border);
+  border-radius:50%; pointer-events:none;
+}
+.contact-geo::after {
+  content:''; position:absolute; inset:60px;
+  border:1px solid var(--border);
+  border-radius:50%;
+}
+
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+footer {
+  background:var(--ink); color:var(--paper);
+  padding:2rem 6rem;
+  display:flex; justify-content:space-between; align-items:center;
+  border-top:1px solid rgba(255,255,255,0.06);
+}
+footer .f-left {
+  font-family:'Cormorant Garamond', serif;
+  font-size:1.1rem; font-style:italic;
+}
+footer .f-right {
+  font-family:'Space Mono', monospace;
+  font-size:0.6rem; letter-spacing:0.12em; text-transform:uppercase;
+  color:rgba(255,255,255,0.4);
+}
+
+/* ═══════════════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════════════ */
+[data-reveal] {
+  opacity:0; transform:translateY(40px);
+  transition:opacity 0.9s ease, transform 0.9s ease;
+}
+[data-reveal].visible { opacity:1; transform:translateY(0); }
+[data-reveal="left"] { transform:translateX(-40px); }
+[data-reveal="left"].visible { transform:translateX(0); }
+[data-reveal="scale"] { transform:scale(0.95); }
+[data-reveal="scale"].visible { transform:scale(1); }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media (max-width:1024px) {
+  #hero { grid-template-columns:1fr; }
+  .hero-right { display:none; }
+  .section-wrap { padding:5rem 3rem; }
+  .flashcards-grid { grid-template-columns:repeat(2,1fr); }
+  .projects-grid { grid-template-columns:repeat(2,1fr); }
+  .certs-grid { grid-template-columns:repeat(2,1fr); }
+  .events-grid { grid-template-columns:repeat(2,1fr); }
+  nav { padding:0 2rem; }
+  .nav-links { gap:1.5rem; }
+  .wit-banner { padding:2rem 3rem; }
+  footer { padding:2rem 3rem; }
+}
+@media (max-width:640px) {
+  .flashcards-grid,.projects-grid,.certs-grid,.events-grid { grid-template-columns:1fr; }
+  .section-wrap { padding:4rem 1.5rem; }
+  .tl-item { grid-template-columns:1fr; }
+  .tl-left { border-right:none; border-bottom:1px solid var(--border); }
+  .nav-links { display:none; }
+  footer { flex-direction:column; gap:1rem; text-align:center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curRing"></div>
+
+<!-- Progress -->
+<div id="progress"></div>
+
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav>
+  <div class="nav-wordmark">Uzra Fatima</div>
+  <ul class="nav-links">
+    <li><a href="#hero"           data-num="00">Home</a></li>
+    <li><a href="#skills"         data-num="01">Skills</a></li>
+    <li><a href="#experience"     data-num="02">Experience</a></li>
+    <li><a href="#projects"       data-num="03">Projects</a></li>
+    <li><a href="#certifications" data-num="04">Certs</a></li>
+    <li><a href="#women-in-tech"  data-num="05">WiT Events</a></li>
+    <li><a href="#contact"        data-num="06">Contact</a></li>
+  </ul>
+  <a href="https://www.linkedin.com/in/syedaabedi-codealchemy/" class="nav-hire" target="_blank">Open to Work</a>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section id="hero">
+  <div class="hero-bg">
+    <div class="geo-line"></div>
+    <div class="geo-line"></div>
+    <div class="geo-line"></div>
+    <div class="geo-line"></div>
+    <div class="geo-line"></div>
+  </div>
+  <div class="hero-geo-circle"></div>
+
+  <!-- floating data bits -->
+  <span class="data-bit" style="top:15%;left:8%;animation-delay:-1s;">PHP_DEV</span>
+  <span class="data-bit" style="top:40%;left:55%;animation-delay:-3s;">AWS::EC2</span>
+  <span class="data-bit" style="top:70%;left:20%;animation-delay:-5s;">git push</span>
+  <span class="data-bit" style="top:20%;left:72%;animation-delay:-2s;">SELECT *</span>
+  <span class="data-bit" style="top:80%;left:65%;animation-delay:-4s;">k-means()</span>
+  <span class="data-bit" style="top:55%;left:38%;animation-delay:-6s;">IDS/IPS</span>
+
+  <div class="hero-left">
+    <div class="hero-eyebrow">Software Engineer · Houston, TX</div>
+    <h1 class="hero-name">
+      Syeda Uzra
+      <em>Fatima</em>
+    </h1>
+    <div class="hero-title-bar">
+      <span>PHP · Python · Java</span>
+      <span>AWS · Azure</span>
+      <span>Cybersecurity</span>
+    </div>
+    <p class="hero-bio">
+      Software engineer with 2+ years building web applications, conducting QA testing, and securing network environments. Currently pursuing an M.S. in Information Science at Trine University — bridging development, data, and security.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">2+</div>
+        <div class="hero-stat-label">Yrs Experience</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">6</div>
+        <div class="hero-stat-label">Key Projects</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">8</div>
+        <div class="hero-stat-label">Certifications</div>
+      </div>
+    </div>
+    <div class="hero-actions">
+      <a href="#projects" class="btn-primary">View Projects</a>
+      <a href="#contact"  class="btn-outline">Get in Touch</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-card-stack">
+      <div class="hero-profile-card">
+        <div class="profile-card-initial">U</div>
+        <div class="profile-card-tag">◈ Profile Card</div>
+        <div class="profile-location">Houston, Texas, US</div>
+        <div class="profile-card-name">Syeda Uzra<br>Fatima</div>
+        <div class="profile-card-role">Software Engineer · M.S. Candidate</div>
+        <div class="profile-skills-mini">
+          <span class="skill-chip">Python</span>
+          <span class="skill-chip">PHP</span>
+          <span class="skill-chip">AWS</span>
+          <span class="skill-chip">Cybersec</span>
+          <span class="skill-chip">SQL</span>
+          <span class="skill-chip">Selenium</span>
+        </div>
+        <div class="profile-available">
+          <div class="avail-dot"></div>
+          Available for opportunities
+        </div>
+      </div>
+      <div class="hero-profile-card" style="background:var(--cream);border:1px solid var(--border-strong);color:var(--ink);transform:rotate(4deg);">
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════ SKILLS ═══════════════ -->
+<section id="skills">
+  <div class="section-wrap">
+    <div class="section-header" data-reveal>
+      <div class="section-num">01 — Skills</div>
+      <h2 class="section-title">Technology <em>Stack</em></h2>
+    </div>
+    <div class="flashcards-grid">
+
+      <div class="fc" data-reveal>
+        <div class="fc-inner">
+          <div class="fc-face fc-front">
+            <div class="fc-front-icon">🐍</div>
+            <div class="fc-front-title">Languages & OOP</div>
+            <div class="fc-front-cat">Core Programming</div>
+            <div class="fc-hint">hover to reveal ↻</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-back-label">Proficient In</div>
+            <div class="fc-back-title">Languages & OOP</div>
+            <div class="fc-back-items">
+              <span>Python</span><span>PHP</span><span>Java</span>
+              <span>C</span><span>R</span><span>SQL</span>
+              <span>OOP</span><span>DSA</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc" data-reveal>
+        <div class="fc-inner">
+          <div class="fc-face fc-front">
+            <div class="fc-front-icon">☁️</div>
+            <div class="fc-front-title">Cloud & DevOps</div>
+            <div class="fc-front-cat">Infrastructure</div>
+            <div class="fc-hint">hover to reveal ↻</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-back-label">Tools & Platforms</div>
+            <div class="fc-back-title">Cloud & DevOps</div>
+            <div class="fc-back-items">
+              <span>AWS</span><span>Azure</span><span>Git</span>
+              <span>CI/CD</span><span>cPanel</span><span>XAMPP</span>
+              <span>Jira</span><span>ZenHub</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc" data-reveal>
+        <div class="fc-inner">
+          <div class="fc-face fc-front">
+            <div class="fc-front-icon">🔐</div>
+            <div class="fc-front-title">Network & Security</div>
+            <div class="fc-front-cat">Cybersecurity</div>
+            <div class="fc-hint">hover to reveal ↻</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-back-label">Security Skills</div>
+            <div class="fc-back-title">Network & Security</div>
+            <div class="fc-back-items">
+              <span>IDS/IPS</span><span>SIEM</span><span>TCP/IP</span>
+              <span>DNS</span><span>DHCP</span><span>SNMP</span>
+              <span>Encryption</span><span>Incident Response</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc" data-reveal>
+        <div class="fc-inner">
+          <div class="fc-face fc-front">
+            <div class="fc-front-icon">🧪</div>
+            <div class="fc-front-title">QA & Testing</div>
+            <div class="fc-front-cat">Quality Assurance</div>
+            <div class="fc-hint">hover to reveal ↻</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-back-label">Testing Arsenal</div>
+            <div class="fc-back-title">QA & Testing</div>
+            <div class="fc-back-items">
+              <span>Selenium</span><span>API Testing</span>
+              <span>Regression</span><span>Negative Path</span>
+              <span>Usability</span><span>Jira Tracking</span>
+              <span>User Stories</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc" data-reveal>
+        <div class="fc-inner">
+          <div class="fc-face fc-front">
+            <div class="fc-front-icon">📊</div>
+            <div class="fc-front-title">Data Science & R</div>
+            <div class="fc-front-cat">Analytics</div>
+            <div class="fc-hint">hover to reveal ↻</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-back-label">Analysis Methods</div>
+            <div class="fc-back-title">Data Science & R</div>
+            <div class="fc-back-items">
+              <span>R</span><span>Python</span><span>PCA</span>
+              <span>K-Means</span><span>Regression</span>
+              <span>ANOVA</span><span>Hypothesis Testing</span>
+              <span>Data Mining</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc" data-reveal>
+        <div class="fc-inner">
+          <div class="fc-face fc-front">
+            <div class="fc-front-icon">🗂️</div>
+            <div class="fc-front-title">Project Management</div>
+            <div class="fc-front-cat">Methodologies</div>
+            <div class="fc-hint">hover to reveal ↻</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-back-label">Frameworks Used</div>
+            <div class="fc-back-title">Project Management</div>
+            <div class="fc-back-items">
+              <span>Agile</span><span>Scrum</span><span>Kanban</span>
+              <span>SDLC</span><span>WBS</span><span>Gantt</span>
+              <span>Stakeholder Mgmt</span><span>CompTIA Project+</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════ EXPERIENCE ═══════════════ -->
+<section id="experience">
+  <div class="section-wrap">
+    <div class="section-header" data-reveal>
+      <div class="section-num">02 — Experience</div>
+      <h2 class="section-title">Career <em>Journey</em></h2>
+    </div>
+    <div class="timeline">
+
+      <div class="tl-item" data-num="01" data-reveal>
+        <div class="tl-left">
+          <div class="tl-date">Jan 2021 — Oct 2023</div>
+          <div class="tl-type">Full-Time</div>
+        </div>
+        <div class="tl-right">
+          <div class="tl-role">Software Engineer</div>
+          <div class="tl-company">Labtron Equipment Pvt Ltd — Hyderabad, India</div>
+          <ul class="tl-bullets">
+            <li>Developed and maintained web-based applications using PHP with server-side logic and database integration</li>
+            <li>Managed server environments locally and via cPanel for deployment and configuration across staging and production</li>
+            <li>Utilized Git for version control including branch management, commit workflows, and code reviews</li>
+            <li>Created and executed test plans to validate functionality; performed regression, negative path, and usability testing</li>
+            <li>Reported and tracked software issues using Jira; validated fixes and conducted retesting across environments</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item" data-num="02" data-reveal>
+        <div class="tl-left">
+          <div class="tl-date">2024 — Dec 2025</div>
+          <div class="tl-type">Graduate Study</div>
+        </div>
+        <div class="tl-right">
+          <div class="tl-role">M.S. Information Science (In Progress)</div>
+          <div class="tl-company">Trine University — Detroit, MI</div>
+          <ul class="tl-bullets">
+            <li>Graduate coursework spanning statistical modeling, network design, cybersecurity, and data mining</li>
+            <li>Research on synthetic cancer survival data using hypothesis testing, ANOVA, and regression analysis</li>
+            <li>Applied project management methodologies through case studies earning CompTIA Project+ certification</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item" data-num="03" data-reveal>
+        <div class="tl-left">
+          <div class="tl-date">Ongoing</div>
+          <div class="tl-type">Volunteer</div>
+        </div>
+        <div class="tl-right">
+          <div class="tl-role">Code4Good Volunteer</div>
+          <div class="tl-company">American Red Cross — Remote</div>
+          <ul class="tl-bullets">
+            <li>Contributed software engineering skills to humanitarian tech initiatives remotely</li>
+            <li>Applied coding expertise to support community impact projects within the Red Cross volunteer network</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════ PROJECTS ═══════════════ -->
+<section id="projects">
+  <div class="section-wrap">
+    <div class="section-header" data-reveal>
+      <div class="section-num">03 — Projects</div>
+      <h2 class="section-title">Key <em>Projects</em></h2>
+    </div>
+    <div class="projects-grid">
+
+      <div class="proj-card" data-reveal>
+        <div class="proj-arrow">↗</div>
+        <div class="proj-num">01</div>
+        <div class="proj-cat">Data Science · Statistics</div>
+        <div class="proj-title">Synthetic Cancer Survival Data Analysis</div>
+        <div class="proj-desc">Research applying statistical modeling and quantitative analysis to synthetic cancer survival data — exploring mortality patterns using hypothesis testing, regression, and ANOVA.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">Python</span>
+          <span class="proj-tag">Hypothesis Testing</span>
+          <span class="proj-tag">ANOVA</span>
+          <span class="proj-tag">Regression</span>
+        </div>
+        <div class="proj-cert">Certified: Trine University</div>
+      </div>
+
+      <div class="proj-card" data-reveal>
+        <div class="proj-arrow">↗</div>
+        <div class="proj-num">02</div>
+        <div class="proj-cat">Networking · Security</div>
+        <div class="proj-title">Campus Network Design & Security</div>
+        <div class="proj-desc">Designed and secured a full campus network using subnetting, TCP/IP protocols, and NMS. Implemented network security best practices including firewall rules and IP protocol configuration.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">TCP/IP</span>
+          <span class="proj-tag">Subnetting</span>
+          <span class="proj-tag">NMS</span>
+          <span class="proj-tag">Network Security</span>
+        </div>
+        <div class="proj-cert">Certified: CompTIA Network+</div>
+      </div>
+
+      <div class="proj-card" data-reveal>
+        <div class="proj-arrow">↗</div>
+        <div class="proj-num">03</div>
+        <div class="proj-cat">Web Development · PHP</div>
+        <div class="proj-title">Student Record Management System</div>
+        <div class="proj-desc">Built a PHP-based web application with advanced SQL features for managing student records — including CRUD operations, data validation, secure input handling, and server deployment via XAMPP.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">PHP</span>
+          <span class="proj-tag">SQL Server</span>
+          <span class="proj-tag">XAMPP</span>
+          <span class="proj-tag">CRUD</span>
+        </div>
+        <div class="proj-cert">Certified: Database Management Systems</div>
+      </div>
+
+      <div class="proj-card" data-reveal>
+        <div class="proj-arrow">↗</div>
+        <div class="proj-num">04</div>
+        <div class="proj-cat">Computer Vision · IoT</div>
+        <div class="proj-title">Virtual Mouse via OpenCV Hand Tracking</div>
+        <div class="proj-desc">Developed a gesture-controlled virtual mouse using Python and OpenCV for real-time webcam hand tracking. The system maps finger positions to cursor movement and click events without hardware input.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">Python</span>
+          <span class="proj-tag">OpenCV</span>
+          <span class="proj-tag">Computer Vision</span>
+          <span class="proj-tag">IoT</span>
+        </div>
+        <div class="proj-cert">Certified: Python Programming</div>
+      </div>
+
+      <div class="proj-card" data-reveal>
+        <div class="proj-arrow">↗</div>
+        <div class="proj-num">05</div>
+        <div class="proj-cat">Data Science · R Programming</div>
+        <div class="proj-title">Credit Risk Cluster Analysis</div>
+        <div class="proj-desc">Used PCA and K-Means clustering to segment financial data for credit risk modeling. Built predictive models from clustering results to classify risk profiles, providing interpretable decision-support outputs.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">R</span>
+          <span class="proj-tag">PCA</span>
+          <span class="proj-tag">K-Means</span>
+          <span class="proj-tag">Predictive Analytics</span>
+        </div>
+        <div class="proj-cert">Certified: R Programming</div>
+      </div>
+
+      <div class="proj-card" data-reveal>
+        <div class="proj-arrow">↗</div>
+        <div class="proj-num">06</div>
+        <div class="proj-cat">Project Management · Agile</div>
+        <div class="proj-title">Global Project Case Study Documentation</div>
+        <div class="proj-desc">Created a comprehensive project charter, communication memo, and formal closure documentation for a global case study — applying Agile, WBS, Kanban, Gantt scheduling, and stakeholder management frameworks.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">Agile</span>
+          <span class="proj-tag">WBS</span>
+          <span class="proj-tag">Kanban</span>
+          <span class="proj-tag">Stakeholder Mgmt</span>
+        </div>
+        <div class="proj-cert">Certified: CompTIA Project+</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════ CERTIFICATIONS ═══════════════ -->
+<section id="certifications">
+  <div class="section-wrap">
+    <div class="section-header" data-reveal>
+      <div class="section-num">04 — Credentials</div>
+      <h2 class="section-title">Certifi<em>cations</em></h2>
+    </div>
+  </div>
+
+  <!-- Scrolling marquee -->
+  <div class="certs-marquee-wrap" data-reveal>
+    <div class="certs-marquee">
+      <!-- duplicated for seamless loop -->
+      <div class="cert-item"><span class="cert-icon">🏅</span><div><div class="cert-name">CompTIA Network+</div><div class="cert-issuer">Networking</div></div></div>
+      <div class="cert-item"><span class="cert-icon">🏅</span><div><div class="cert-name">CompTIA Project+</div><div class="cert-issuer">Project Management</div></div></div>
+      <div class="cert-item"><span class="cert-icon">☁️</span><div><div class="cert-name">AWS Cloud</div><div class="cert-issuer">Cloud Computing</div></div></div>
+      <div class="cert-item"><span class="cert-icon">🔐</span><div><div class="cert-name">Cybersecurity</div><div class="cert-issuer">Security</div></div></div>
+      <div class="cert-item"><span class="cert-icon">🐍</span><div><div class="cert-name">Python Programming</div><div class="cert-issuer">Development</div></div></div>
+      <div class="cert-item"><span class="cert-icon">☕</span><div><div class="cert-name">Java OOPs</div><div class="cert-issuer">Programming</div></div></div>
+      <div class="cert-item"><span class="cert-icon">📊</span><div><div class="cert-name">R Programming</div><div class="cert-issuer">Data Science</div></div></div>
+      <div class="cert-item"><span class="cert-icon">🔍</span><div><div class="cert-name">Data Mining</div><div class="cert-issuer">Analytics</div></div></div>
+      <!-- duplicate -->
+      <div class="cert-item"><span class="cert-icon">🏅</span><div><div class="cert-name">CompTIA Network+</div><div class="cert-issuer">Networking</div></div></div>
+      <div class="cert-item"><span class="cert-icon">🏅</span><div><div class="cert-name">CompTIA Project+</div><div class="cert-issuer">Project Management</div></div></div>
+      <div class="cert-item"><span class="cert-icon">☁️</span><div><div class="cert-name">AWS Cloud</div><div class="cert-issuer">Cloud Computing</div></div></div>
+      <div class="cert-item"><span class="cert-icon">🔐</span><div><div class="cert-name">Cybersecurity</div><div class="cert-issuer">Security</div></div></div>
+      <div class="cert-item"><span class="cert-icon">🐍</span><div><div class="cert-name">Python Programming</div><div class="cert-issuer">Development</div></div></div>
+      <div class="cert-item"><span class="cert-icon">☕</span><div><div class="cert-name">Java OOPs</div><div class="cert-issuer">Programming</div></div></div>
+      <div class="cert-item"><span class="cert-icon">📊</span><div><div class="cert-name">R Programming</div><div class="cert-issuer">Data Science</div></div></div>
+      <div class="cert-item"><span class="cert-icon">🔍</span><div><div class="cert-name">Data Mining</div><div class="cert-issuer">Analytics</div></div></div>
+    </div>
+  </div>
+
+  <div class="section-wrap">
+    <div class="certs-grid" data-reveal>
+      <div class="cert-block">
+        <div class="cert-block-num">01</div>
+        <div class="cert-block-name">CompTIA Network+</div>
+        <div class="cert-block-cat">Networking & Infrastructure</div>
+      </div>
+      <div class="cert-block">
+        <div class="cert-block-num">02</div>
+        <div class="cert-block-name">CompTIA Project+</div>
+        <div class="cert-block-cat">Project Management</div>
+      </div>
+      <div class="cert-block">
+        <div class="cert-block-num">03</div>
+        <div class="cert-block-name">AWS Cloud</div>
+        <div class="cert-block-cat">Cloud Computing</div>
+      </div>
+      <div class="cert-block">
+        <div class="cert-block-num">04</div>
+        <div class="cert-block-name">Cybersecurity</div>
+        <div class="cert-block-cat">Network Security</div>
+      </div>
+      <div class="cert-block">
+        <div class="cert-block-num">05</div>
+        <div class="cert-block-name">Python Programming</div>
+        <div class="cert-block-cat">Software Development</div>
+      </div>
+      <div class="cert-block">
+        <div class="cert-block-num">06</div>
+        <div class="cert-block-name">Java OOPs</div>
+        <div class="cert-block-cat">Object-Oriented Programming</div>
+      </div>
+      <div class="cert-block">
+        <div class="cert-block-num">07</div>
+        <div class="cert-block-name">R Programming</div>
+        <div class="cert-block-cat">Data Science & Analytics</div>
+      </div>
+      <div class="cert-block">
+        <div class="cert-block-num">08</div>
+        <div class="cert-block-name">Data Mining</div>
+        <div class="cert-block-cat">Analytics & Insights</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider" style="background:linear-gradient(90deg,transparent,var(--rose));"></div>
+
+<!-- ═══════════════ WOMEN IN TECH ═══════════════ -->
+<section id="women-in-tech">
+  <div class="section-wrap" style="padding-bottom:0;">
+    <div class="section-header" data-reveal>
+      <div class="section-num">05 — Community</div>
+      <h2 class="section-title">Women in <em>Tech</em> Events</h2>
+    </div>
+  </div>
+
+  <div class="wit-banner" data-reveal="left">
+    <div>
+      <div class="wit-banner-title">Advocating for Women in Technology</div>
+      <div class="wit-banner-sub">Conferences · Summits · Hackathons · Networking Events · 2025</div>
+    </div>
+    <div class="wit-badge">♀ Participant & Advocate</div>
+  </div>
+
+  <div class="section-wrap" style="padding-top:0;">
+    <div class="events-grid">
+
+      <div class="event-card" data-reveal>
+        <div class="event-card-top">
+          <div class="event-date-row">
+            <div class="event-day">14</div>
+            <div class="event-month-year">March 2025</div>
+          </div>
+          <div class="event-title">Grace Hopper Celebration 2025 <span class="event-role-badge badge-speaker">Speaker</span></div>
+          <div class="event-org">AnitaB.org</div>
+        </div>
+        <div class="event-card-body">
+          <div class="event-desc">The world's largest gathering of women and non-binary technologists — featuring technical talks, career development sessions, and a robust recruiting fair connecting engineers with top companies.</div>
+          <div class="event-tags">
+            <span class="event-tag">Annual</span>
+            <span class="event-tag">Networking</span>
+            <span class="event-tag">Career Fair</span>
+            <span class="event-tag">Technical Talks</span>
+          </div>
+          <a href="https://ghc.anitab.org" class="event-link" target="_blank">Register Now →</a>
+        </div>
+      </div>
+
+      <div class="event-card" data-reveal>
+        <div class="event-card-top">
+          <div class="event-date-row">
+            <div class="event-day">22</div>
+            <div class="event-month-year">April 2025</div>
+          </div>
+          <div class="event-title">Women Who Code CONNECT</div>
+          <div class="event-org">Women Who Code</div>
+        </div>
+        <div class="event-card-body">
+          <div class="event-desc">A global virtual summit connecting 10,000+ women in tech across engineering, data science, design, and product. Features workshops, fireside chats, and live coding sessions — all free to attend.</div>
+          <div class="event-tags">
+            <span class="event-tag">Virtual</span>
+            <span class="event-tag">Free Tickets</span>
+            <span class="event-tag">Global</span>
+            <span class="event-tag">Workshops</span>
+          </div>
+          <a href="https://www.womenwhocode.com" class="event-link" target="_blank">Get Free Pass →</a>
+        </div>
+      </div>
+
+      <div class="event-card" data-reveal>
+        <div class="event-card-top">
+          <div class="event-date-row">
+            <div class="event-day">08</div>
+            <div class="event-month-year">May 2025</div>
+          </div>
+          <div class="event-title">She Leads Tech Summit</div>
+          <div class="event-org">Lesbians Who Tech</div>
+        </div>
+        <div class="event-card-body">
+          <div class="event-desc">An inclusive summit amplifying LGBTQ+ women and non-binary engineers. Panel discussions on intersectionality in tech leadership, psychological safety on teams, and building inclusive engineering cultures.</div>
+          <div class="event-tags">
+            <span class="event-tag">Inclusive</span>
+            <span class="event-tag">Leadership</span>
+            <span class="event-tag">In-Person</span>
+            <span class="event-tag">DEI</span>
+          </div>
+          <a href="https://lesbianswhotech.org" class="event-link" target="_blank">Apply for Scholarship →</a>
+        </div>
+      </div>
+
+      <div class="event-card" data-reveal>
+        <div class="event-card-top">
+          <div class="event-date-row">
+            <div class="event-day">03</div>
+            <div class="event-month-year">June 2025</div>
+          </div>
+          <div class="event-title">WISET National Conference</div>
+          <div class="event-org">Women in Science, Engineering & Technology</div>
+        </div>
+        <div class="event-card-body">
+          <div class="event-desc">Cross-discipline summit for women in STEM featuring research presentations, startup pitches from women founders, cloud computing workshops, and mentorship sessions with industry leaders.</div>
+          <div class="event-tags">
+            <span class="event-tag">STEM</span>
+            <span class="event-tag">Workshop</span>
+            <span class="event-tag">Mentoring</span>
+            <span class="event-tag">Research</span>
+          </div>
+          <a href="https://womeninstem.org" class="event-link" target="_blank">Submit Proposal →</a>
+        </div>
+      </div>
+
+      <div class="event-card" data-reveal>
+        <div class="event-card-top">
+          <div class="event-date-row">
+            <div class="event-day">19</div>
+            <div class="event-month-year">Aug 2025</div>
+          </div>
+          <div class="event-title">Tech Inclusion Conference</div>
+          <div class="event-org">Change Catalyst</div>
+        </div>
+        <div class="event-card-body">
+          <div class="event-desc">DEI-focused tech event bringing together industry leaders to advance inclusive innovation. Featuring roundtables on women of color in engineering, navigating systemic barriers, and pay equity.</div>
+          <div class="event-tags">
+            <span class="event-tag">DEI</span>
+            <span class="event-tag">Roundtable</span>
+            <span class="event-tag">San Francisco</span>
+            <span class="event-tag">Equity</span>
+          </div>
+          <a href="https://techinclusion.co" class="event-link" target="_blank">Get Tickets →</a>
+        </div>
+      </div>
+
+      <div class="event-card" data-reveal>
+        <div class="event-card-top">
+          <div class="event-date-row">
+            <div class="event-day">11</div>
+            <div class="event-month-year">Oct 2025</div>
+          </div>
+          <div class="event-title">International Girl in Tech Hackathon <span class="event-role-badge badge-mentor">Mentor</span></div>
+          <div class="event-org">UN Women × AWS She Builds</div>
+        </div>
+        <div class="event-card-body">
+          <div class="event-desc">24-hour hackathon on International Day of the Girl. Build tech solutions to gender-equity challenges. Connect with women engineers globally, get mentored by industry experts, and pitch to a live panel of judges.</div>
+          <div class="event-tags">
+            <span class="event-tag">Hackathon</span>
+            <span class="event-tag">Global</span>
+            <span class="event-tag">24-Hour</span>
+            <span class="event-tag">Open to All</span>
+          </div>
+          <a href="https://aws.amazon.com/campaigns/she-builds/" class="event-link" target="_blank">Register Team →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════ CONTACT ═══════════════ -->
+<section id="contact">
+  <div class="section-wrap">
+    <div class="contact-inner" data-reveal>
+      <h2 class="contact-super">
+        Let's
+        <em>Connect</em>
+      </h2>
+      <p class="contact-sub">
+        Open to software engineering roles, graduate research collaborations, and Women in Tech community events. Based in Houston, TX — open to remote.
+      </p>
+      <div class="contact-links">
+        <a href="https://www.linkedin.com/in/syedaabedi-codealchemy/" class="contact-link primary" target="_blank">
+          ⟢ LinkedIn Profile
+        </a>
+        <a href="mailto:sufaabedi7@gmail.com" class="contact-link">
+          ✉ sufaabedi7@gmail.com
+        </a>
+        <a href="https://www.linkedin.com/in/syedaabedi-codealchemy/" class="contact-link" target="_blank">
+          ↗ View Portfolio
+        </a>
+      </div>
+    </div>
+    <div class="contact-geo"></div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <div class="f-left">Syeda Uzra Fatima — Software Engineer</div>
+  <div class="f-right">Greater Houston, TX &nbsp;·&nbsp; © 2025 &nbsp;·&nbsp; Open to Opportunities</div>
+</footer>
+
+<!-- ═══════════════ SCRIPTS ═══════════════ -->
+<script>
+/* ── Cursor ── */
+const cur = document.getElementById('cur');
+const ring = document.getElementById('curRing');
+let mx=0, my=0, rx=0, ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+function animCursor() {
+  cur.style.left  = mx + 'px';
+  cur.style.top   = my + 'px';
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top  = ry + 'px';
+  requestAnimationFrame(animCursor);
+}
+animCursor();
+document.querySelectorAll('a,button,.fc,.proj-card,.event-card,.hero-stat').forEach(el => {
+  el.addEventListener('mouseenter', () => { cur.classList.add('hover'); ring.classList.add('hover'); });
+  el.addEventListener('mouseleave', () => { cur.classList.remove('hover'); ring.classList.remove('hover'); });
+});
+
+/* ── Progress Bar ── */
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.documentElement.scrollHeight - innerHeight) * 100;
+  document.getElementById('progress').style.width = pct + '%';
+});
+
+/* ── Scroll Reveal ── */
+const revealEls = document.querySelectorAll('[data-reveal]');
+const ro = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), 80);
+      ro.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+revealEls.forEach((el, i) => {
+  el.style.transitionDelay = (i % 4 * 80) + 'ms';
+  ro.observe(el);
+});
+
+/* ── Active Nav ── */
+const sects = document.querySelectorAll('section[id]');
+const navAs = document.querySelectorAll('.nav-links a');
+const onScroll = () => {
+  let cur = '';
+  sects.forEach(s => { if (scrollY >= s.offsetTop - 120) cur = s.id; });
+  navAs.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + cur);
+  });
+};
+window.addEventListener('scroll', onScroll, { passive:true });
+
+/* ── Counter animation on hero stats ── */
+const counters = document.querySelectorAll('.hero-stat-num');
+const cObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target;
+    const raw = el.textContent;
+    const num = parseFloat(raw);
+    if (isNaN(num)) return;
+    const suffix = raw.replace(String(num),'');
+    let start = 0, dur = 1200, t0 = null;
+    const step = ts => {
+      if (!t0) t0 = ts;
+      const p = Math.min((ts - t0) / dur, 1);
+      const ease = 1 - Math.pow(1 - p, 3);
+      el.textContent = (num <= 10 ? (ease * num).toFixed(0) : Math.round(ease * num)) + suffix;
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+    cObs.unobserve(el);
+  });
+}, { threshold:0.5 });
+counters.forEach(c => cObs.observe(c));
+</script>
+</body>
+</html>
