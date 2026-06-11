@@ -390,6 +390,39 @@ nav {
 .proj-arrow { position:absolute; top:1.5rem; right:1.5rem; font-size:1.1rem; color:var(--border-strong); transition:all 0.3s; }
 .proj-card:hover .proj-arrow { color:var(--rose); transform:translate(3px,-3px); }
 /* ═══════════════════════════════════════════
+   SPONSOR PROJECTS
+═══════════════════════════════════════════ */
+#sponsor { background:var(--paper); }
+.sponsor-layout { display:grid; grid-template-columns:1.2fr 1fr; gap:2rem; align-items:start; }
+.sponsor-panel {
+  border:1px solid var(--border-strong);
+  background:linear-gradient(145deg, var(--paper) 0%, var(--cream) 100%);
+  padding:2.2rem;
+}
+.sponsor-kicker {
+  font-family:'Space Mono', monospace;
+  font-size:0.58rem; letter-spacing:0.14em; text-transform:uppercase;
+  color:var(--teal); margin-bottom:1rem;
+}
+.sponsor-copy { font-size:0.92rem; line-height:1.75; color:var(--ink-soft); margin-bottom:1.3rem; }
+.sponsor-list { list-style:none; display:grid; gap:0.7rem; }
+.sponsor-list li { font-size:0.86rem; line-height:1.55; color:var(--ink-soft); display:flex; gap:0.6rem; }
+.sponsor-list li::before { content:'◉'; color:var(--rose); font-size:0.68rem; margin-top:0.18rem; }
+.payment-grid { display:grid; grid-template-columns:1fr; gap:1rem; }
+.payment-card {
+  border:1px solid var(--border-strong);
+  background:var(--paper);
+  padding:1.4rem 1.3rem;
+  text-decoration:none;
+  color:inherit;
+  transition:transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+}
+.payment-card:hover { transform:translateY(-4px); border-color:var(--rose); box-shadow:0 12px 30px rgba(0,0,0,0.08); }
+.payment-type { font-family:'Space Mono', monospace; font-size:0.58rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-mute); margin-bottom:0.4rem; }
+.payment-name { font-family:'Cormorant Garamond', serif; font-size:1.35rem; font-weight:600; line-height:1.2; margin-bottom:0.35rem; }
+.payment-note { font-size:0.82rem; line-height:1.6; color:var(--ink-soft); }
+.payment-action { font-family:'Space Mono', monospace; font-size:0.6rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--rose); margin-top:0.9rem; display:inline-block; }
+/* ═══════════════════════════════════════════
    CERTIFICATIONS
 ═══════════════════════════════════════════ */
 #certifications { background:var(--ink); color:var(--paper); }
@@ -484,13 +517,15 @@ footer .f-right { font-family:'Space Mono', monospace; font-size:0.6rem; letter-
   .projects-grid { grid-template-columns:repeat(2,1fr); }
   .certs-grid { grid-template-columns:repeat(2,1fr); }
   .events-grid { grid-template-columns:repeat(2,1fr); }
+  .sponsor-layout { grid-template-columns:1fr; }
+  .payment-grid { grid-template-columns:repeat(2,1fr); }
   nav { padding:0 2rem; }
   .nav-links { gap:1.5rem; }
   .wit-banner { padding:2rem 3rem; }
   footer { padding:2rem 3rem; }
 }
 @media (max-width:640px) {
-  .flashcards-grid,.projects-grid,.certs-grid,.events-grid { grid-template-columns:1fr; }
+  .flashcards-grid,.projects-grid,.certs-grid,.events-grid,.payment-grid { grid-template-columns:1fr; }
   .section-wrap { padding:4rem 1.5rem; }
   .tl-item { grid-template-columns:1fr; }
   .tl-left { border-right:none; border-bottom:1px solid var(--border); }
@@ -512,9 +547,10 @@ footer .f-right { font-family:'Space Mono', monospace; font-size:0.6rem; letter-
     <li><a href="#skills"         data-num="01">Skills</a></li>
     <li><a href="#experience"     data-num="02">Experience</a></li>
     <li><a href="#projects"       data-num="03">Projects</a></li>
-    <li><a href="#certifications" data-num="04">Certs</a></li>
-    <li><a href="#women-in-tech"  data-num="05">WiT Events</a></li>
-    <li><a href="#contact"        data-num="06">Contact</a></li>
+    <li><a href="#sponsor"        data-num="04">Sponsor</a></li>
+    <li><a href="#certifications" data-num="05">Certs</a></li>
+    <li><a href="#women-in-tech"  data-num="06">WiT Events</a></li>
+    <li><a href="#contact"        data-num="07">Contact</a></li>
     <li><a href="https://www.stemitlab.com" data-num="◈" target="_blank">STEM IT Lab</a></li>
   </ul>
   <a href="https://www.linkedin.com/in/syeda7/" class="nav-hire" target="_blank">Open to Work</a>
@@ -712,11 +748,53 @@ What drives me is bridging the gap between solid engineering practices and data 
 </section>
 <div class="divider"></div>
 
+<!-- SPONSOR -->
+<section id="sponsor">
+  <div class="section-wrap">
+    <div class="section-header" data-reveal>
+      <div class="section-num">04 — Sponsor</div>
+      <h2 class="section-title">Sponsor a <em>Project</em></h2>
+    </div>
+    <div class="sponsor-layout">
+      <div class="sponsor-panel" data-reveal>
+        <div class="sponsor-kicker">Support STEM IT Lab initiatives</div>
+        <p class="sponsor-copy">Your sponsorship helps fund youth-led technology learning projects, cloud labs, and mentorship programs through STEM IT Lab Extension.</p>
+        <ul class="sponsor-list">
+          <li>Scholarships for students joining coding and cybersecurity tracks</li>
+          <li>Equipment and software licenses for practical STEM workshops</li>
+          <li>Community events that increase access for women in tech</li>
+        </ul>
+      </div>
+      <div class="payment-grid">
+        <a href="https://github.com/sponsors/syeda7" class="payment-card" target="_blank" data-reveal>
+          <div class="payment-type">Recurring Support</div>
+          <div class="payment-name">GitHub Sponsors</div>
+          <div class="payment-note">Monthly sponsorship for long-term open-source and education initiatives.</div>
+          <span class="payment-action">Become a Sponsor ↗</span>
+        </a>
+        <a href="https://www.paypal.com/paypalme/stemitlab" class="payment-card" target="_blank" data-reveal>
+          <div class="payment-type">One-Time Donation</div>
+          <div class="payment-name">PayPal</div>
+          <div class="payment-note">Quick one-time contribution to support project development and outreach.</div>
+          <span class="payment-action">Donate via PayPal ↗</span>
+        </a>
+        <a href="mailto:sufaabedi7@gmail.com?subject=Sponsorship%20Inquiry%20for%20STEM%20IT%20Lab" class="payment-card" data-reveal>
+          <div class="payment-type">Institutional Funding</div>
+          <div class="payment-name">Bank Transfer / Wire</div>
+          <div class="payment-note">For organizations, schools, and grant partners requesting invoicing details.</div>
+          <span class="payment-action">Request Payment Details →</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
 <!-- CERTIFICATIONS -->
 <section id="certifications">
   <div class="section-wrap">
     <div class="section-header" data-reveal>
-      <div class="section-num">04 — Credentials</div>
+      <div class="section-num">05 — Credentials</div>
       <h2 class="section-title">Certifi<em>cations</em></h2>
     </div>
   </div>
@@ -759,7 +837,7 @@ What drives me is bridging the gap between solid engineering practices and data 
 <section id="women-in-tech">
   <div class="section-wrap" style="padding-bottom:0;">
     <div class="section-header" data-reveal>
-      <div class="section-num">05 — Community</div>
+      <div class="section-num">06 — Community</div>
       <h2 class="section-title">Women in <em>Tech</em> Events</h2>
     </div>
   </div>
